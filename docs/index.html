@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REST API Usage with the watsonx Orchestrate Developer Edition: A Complete Guide to Agent Orchestration</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #34495e;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            border-left: 4px solid #3498db;
+            padding-left: 15px;
+        }
+        
+        h3 {
+            color: #2c3e50;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        .highlight-box {
+            background: #ecf0f1;
+            border-left: 4px solid #3498db;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        
+        .success-box {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        
+        code {
+            background: #f8f9fa;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            color: #e74c3c;
+        }
+        
+        pre {
+            background: #2c3e50;
+            color: #ffffff;
+            padding: 20px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            line-height: 1.4;
+        }
+        
+        pre code {
+            background: transparent;
+            padding: 0;
+            border-radius: 0;
+            color: #ffffff;
+        }
+        
+        .code-block {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .comparison-table th,
+        .comparison-table td {
+            border: 1px solid #dee2e6;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        .comparison-table th {
+            background: #3498db;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .comparison-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        
+        .step-number {
+            background: #3498db;
+            color: white;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        .api-endpoint {
+            background: #e8f5e8;
+            border: 1px solid #28a745;
+            border-radius: 4px;
+            padding: 10px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .terminal-output {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            margin: 15px 0;
+        }
+        
+        .note {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        
+        ul, ol {
+            margin-bottom: 15px;
+            padding-left: 20px;
+        }
+        
+        li {
+            margin-bottom: 8px;
+        }
+        
+        .toc {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .toc h3 {
+            margin-top: 0;
+            color: #2c3e50;
+        }
+        
+        .toc ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        
+        .toc li {
+            margin-bottom: 5px;
+        }
+        
+        .toc a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        
+        .toc a:hover {
+            text-decoration: underline;
+        }
+        
+        .code-block {
+            position: relative;
+        }
+        
+        .copy-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #34495e;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 5px 10px;
+            font-size: 12px;
+            cursor: pointer;
+            opacity: 0.8;
+            transition: opacity 0.2s;
+        }
+        
+        .copy-button:hover {
+            opacity: 1;
+        }
+        
+        .copy-button.copied {
+            background: #27ae60;
+        }
+        
+        pre {
+            position: relative;
+        }
+        
+        pre .copy-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #34495e;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 5px 10px;
+            font-size: 12px;
+            cursor: pointer;
+            opacity: 0.8;
+            transition: opacity 0.2s;
+        }
+        
+        pre .copy-button:hover {
+            opacity: 1;
+        }
+        
+        pre .copy-button.copied {
+            background: #27ae60;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 style="text-align: center; color: #2c3e50; margin-bottom: 20px; font-size: 2.2em;">Mastering watsonx Orchestrate REST APIs</h1>
+        
+        <div style="text-align: center; margin-bottom: 30px;">
+            <img src="./headerimage.png" alt="watsonx Orchestrate Developer Edition Header" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+        </div>
+        
+        <h2 style="text-align: center; color: #34495e; margin-bottom: 30px; font-size: 1.4em; font-weight: normal;">REST API Usage with the watsonx Orchestrate Developer Edition: A Complete Guide to Agent Orchestration</h2>
+        
+        <div class="highlight-box">
+            <p><strong>This blog post demonstrates how to properly use the REST API with the local watsonx Orchestrate server for agent orchestration.</strong> Unlike other guides that focus on direct LLM interactions, this post shows the correct approach for working with agents that have tools, knowledge bases, and complex workflows.</p>
+        </div>
+
+        <p>The post guides you step-by-step from configuring your local watsonx Orchestrate server to invoking agents via <strong>REST API</strong> using Python. We'll cover environment setup, authentication, agent discovery, and the crucial asynchronous execution pattern that makes agent orchestration work.</p>
+
+        <div class="toc">
+            <h3>Table of Contents</h3>
+            <ul>
+                <li><a href="#whats-covered">What's Covered in This Example</a></li>
+                <li><a href="#step1">Step 1: Environment Setup</a></li>
+                <li><a href="#step2">Step 2: Server Startup</a></li>
+                <li><a href="#step3">Step 3: ADK Activation</a></li>
+                <li><a href="#step4">Step 4: Port Configuration</a></li>
+                <li><a href="#step5">Step 5: Authentication</a></li>
+                <li><a href="#step6">Step 6: Agent Discovery</a></li>
+                <li><a href="#step7">Step 7: Python Implementation</a></li>
+                <li><a href="#step8">Step 8: Testing and Execution</a></li>
+                <li><a href="#comparison">Why This Approach Works vs. Others</a></li>
+                <li><a href="#summary">Summary</a></li>
+            </ul>
+        </div>
+
+        <h2 id="whats-covered">What's Covered in This Example</h2>
+        
+        <p>This post demonstrates a complete flow from server startup to agent invocation:</p>
+        
+        <ol>
+            <li>Preparing your local environment</li>
+            <li>Launching the watsonx Orchestrate server</li>
+            <li>Activating the ADK shell</li>
+            <li>Determining the local port and API endpoints</li>
+            <li>Extracting your Bearer token</li>
+            <li>Listing your agents and getting the agent ID</li>
+            <li>Coding a Python script to invoke agents properly</li>
+            <li>Running the script and handling asynchronous responses</li>
+        </ol>
+
+        <h2 id="step1">Step 1: Environment Setup</h2>
+        
+        <p><span class="step-number">1</span>Create a <code>.env</code> file with the following variables:</p>
+        
+        <div class="code-block">
+            <button class="copy-button" onclick="copyCode(this)">📋 Copy</button>
+            <pre><code>WO_DEVELOPER_EDITION_SOURCE=myibm
+WO_ENTITLEMENT_KEY=&lt;YOUR_ENTITLEMENT_KEY&gt;
+WATSONX_APIKEY=&lt;YOUR_WATSONX_API_KEY&gt;
+WATSONX_SPACE_ID=&lt;YOUR_SPACE_ID&gt;</code></pre>
+        </div>
+
+        <div class="note">
+            <p><strong>Note:</strong> The <code>WO_DEVELOPER_EDITION_SOURCE=myibm</code> variable indicates you're using an entitlement key from MyIBM and accessing watsonx.ai as model sources.</p>
+        </div>
+
+        <h2 id="step2">Step 2: Server Startup</h2>
+        
+        <p><span class="step-number">2</span>The server boots up, connecting local credentials, containers, and runtimes.</p>
+        
+        <div class="code-block">
+            <button class="copy-button" onclick="copyCode(this)">📋 Copy</button>
+            <pre><code>source ./.venv/bin/activate
+orchestrate server start --env-file .env</code></pre>
+        </div>
+
+        <h2 id="step3">Step 3: ADK Activation</h2>
+        
+        <p><span class="step-number">3</span>This ensures that your client targets the local server configuration.</p>
+        
+        <div class="code-block">
+            <button class="copy-button" onclick="copyCode(this)">📋 Copy</button>
+            <pre><code>orchestrate env activate local</code></pre>
+        </div>
+
+        <h2 id="step4">Step 4: Port Configuration</h2>
+        
+        <p><span class="step-number">4</span>When you inspect docker compose on your local machine, you'll find that the watsonx Orchestrate server runs on port <code>4321</code>. You can access the Swagger UI at <code>http://localhost:4321/docs</code>.</p>
+        
+        <p>The server runs on port <strong>4321</strong> by default, and the Swagger API explorer is available at:</p>
+        
+        <ul>
+            <li><strong>API Documentation:</strong> <code>http://localhost:4321/docs</code></li>
+            <li><strong>Base URL:</strong> <code>http://localhost:4321/api/v1/orchestrate</code></li>
+        </ul>
+
+        <h2 id="step5">Step 5: Authentication</h2>
+        
+        <p><span class="step-number">5</span>For local REST API calls, we need a <strong>Bearer token</strong>. We can extract it from the orchestrate cache:</p>
+        
+        <div class="code-block">
+            <button class="copy-button" onclick="copyCode(this)">📋 Copy</button>
+            <pre><code>grep -R "wxo_mcsp_token" ~/.cache/orchestrate/credentials.yaml</code></pre>
+        </div>
+        
+        <p><strong>Windows Command Prompt Alternative:</strong></p>
+        
+        <div class="code-block">
+            <button class="copy-button" onclick="copyCode(this)">📋 Copy</button>
+            <pre><code>findstr "wxo_mcsp_token" %USERPROFILE%\.cache\orchestrate\credentials.yaml</code></pre>
+        </div>
+        
+        <p>The file <code>~/.cache/orchestrate/credentials.yaml</code> contains authentication information:</p>
+        
+        <div class="code-block">
+            <button class="copy-button" onclick="copyCode(this)">📋 Copy</button>
+            <pre><code>auth:
+  local:
+    wxo_mcsp_token: YOUR_TOKEN_HERE</code></pre>
+        </div>
+        
+        <p>Copy the token value for use in your API calls.</p>
+
+        <h2 id="step6">Step 6: Agent Discovery</h2>
+        
+        <p><span class="step-number">6</span>List your agents and get the ID for the agent you want to invoke:</p>
+        
+        <div class="code-block">
+            <button class="copy-button" onclick="copyCode(this)">📋 Copy</button>
+            <pre><code>orchestrate agents list</code></pre>
+        </div>
+        
+        <p>Example output:</p>
+        
+        <div class="terminal-output">
+            <table style="width: 100%; border-collapse: collapse; font-family: 'Courier New', monospace; font-size: 12px;">
+                <thead>
+                    <tr style="background-color: #2c3e50; color: #ecf0f1;">
+                        <th style="border: 1px solid #34495e; padding: 8px; text-align: left;">Name</th>
+                        <th style="border: 1px solid #34495e; padding: 8px; text-align: left;">Description</th>
+                        <th style="border: 1px solid #34495e; padding: 8px; text-align: left;">LLM</th>
+                        <th style="border: 1px solid #34495e; padding: 8px; text-align: left;">Style</th>
+                        <th style="border: 1px solid #34495e; padding: 8px; text-align: left;">Collaborators</th>
+                        <th style="border: 1px solid #34495e; padding: 8px; text-align: left;">Tools</th>
+                        <th style="border: 1px solid #34495e; padding: 8px; text-align: left;">Knowledge Base</th>
+                        <th style="border: 1px solid #34495e; padding: 8px; text-align: left;">ID</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="background-color: #34495e; color: #ecf0f1;">
+                        <td style="border: 1px solid #34495e; padding: 8px;">DataAnalysisAgent</td>
+                        <td style="border: 1px solid #34495e; padding: 8px;">Elasticsearch Data Analysis Agent</td>
+                        <td style="border: 1px solid #34495e; padding: 8px;">watsonx/meta-llama/llama-3-2-90b-vision-instruct</td>
+                        <td style="border: 1px solid #34495e; padding: 8px;">default</td>
+                        <td style="border: 1px solid #34495e; padding: 8px;"></td>
+                        <td style="border: 1px solid #34495e; padding: 8px;">elasticsearch_tool</td>
+                        <td style="border: 1px solid #34495e; padding: 8px;"></td>
+                        <td style="border: 1px solid #34495e; padding: 8px;">b700b57a-29a1-40e1-b895-adf9eba4f907</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <p>Note your agent ID for the next step. In this example, the ID is <code>b700b57a-29a1-40e1-b895-adf9eba4f907</code>.</p>
+
+        <h2 id="step7">Step 7: Python Implementation</h2>
+        
+        <p><span class="step-number">7</span>Create a Python file called <code>agent_orchestrator.py</code> with the following code. This implementation correctly uses the <strong>Runs API</strong> for agent orchestration:</p>
+        
+        <div class="code-block">
+            <button class="copy-button" onclick="copyCode(this)">📋 Copy</button>
+            <pre><code>import requests
+import json
+import time
+
+# Configuration
+token = "your_wxo_mcsp_token_here"
+agent_id = "your_agent_id_here"
+base_url = "http://localhost:4321/api/v1/orchestrate"
+
+headers = {
+    "Authorization": f"Bearer {token}",
+    "Content-Type": "application/json"
+}
+
+def get_run_result(run_id, max_attempts=30, delay=2):
+    """Poll for the run result until it's complete"""
+    get_url = f"{base_url}/runs/{run_id}"
+    
+    for attempt in range(max_attempts):
+        try:
+            resp = requests.get(get_url, headers=headers, timeout=10)
+            resp.raise_for_status()
+            run_data = resp.json()
+            
+            status = run_data.get("status", "unknown")
+            print(f"Run status (attempt {attempt + 1}): {status}")
+            
+            if status == "completed":
+                return run_data
+            elif status in ["failed", "cancelled"]:
+                return {"error": f"Run {status}", "details": run_data}
+            
+            time.sleep(delay)
+            
+        except Exception as e:
+            print(f"Error checking run status: {e}")
+            time.sleep(delay)
+    
+    return {"error": "Timeout waiting for run to complete"}
+
+def call_orchestrate(question):
+    """Invoke an agent using the Runs API"""
+    chat_url = f"{base_url}/runs"
+    
+    payload = {
+        "agent_id": agent_id,
+        "message": {
+            "role": "user",
+            "content": question
+        }
+    }
+
+    print("Sending payload:", json.dumps(payload, indent=2))
+    resp = requests.post(chat_url, headers=headers, json=payload, timeout=10)
+    resp.raise_for_status()
+    data = resp.json()
+    print("Initial API response:", json.dumps(data, indent=2))
+    
+    # Get the actual run result
+    run_id = data.get("run_id")
+    if run_id:
+        print(f"Waiting for run {run_id} to complete...")
+        run_result = get_run_result(run_id)
+        print("Final run result:", json.dumps(run_result, indent=2))
+        return run_result
+    else:
+        return {"error": "No run_id in response", "response": data}
+
+def parse_agent_response(response):
+    """Parse the agent response to extract answer and citations"""
+    try:
+        result_data = response.get('result', {}).get('data', {}).get('message', {})
+        content = result_data.get('content', [])
+        
+        if content and len(content) > 0:
+            answer_text = content[0].get('text', 'No answer found')
+            citations = content[0].get('citations', [])
+            
+            print("Agent Response:", answer_text)
+            
+            if citations:
+                print("\nSources:")
+                for i, citation in enumerate(citations, 1):
+                    title = citation.get('title', 'Unknown source')
+                    url = citation.get('url', '')
+                    if len(url) > 60:
+                        display_url = url[:60] + "..."
+                    else:
+                        display_url = url
+                    print(f"  [{i}] {title}")
+                    if display_url:
+                        print(f"      {display_url}")
+        else:
+            print("Agent: No content found in response")
+    except Exception as e:
+        print(f"Agent: Error parsing response - {e}")
+        print("Raw response:", response)
+
+# Example usage
+if __name__ == "__main__":
+    question = "Analyze the recent sales data from our Elasticsearch database"
+    response = call_orchestrate(question)
+    parse_agent_response(response)</code></pre>
+        </div>
+
+        <div class="warning-box">
+            <p><strong>Important:</strong> This implementation uses the <strong>Runs API</strong> (<code>/runs</code>) which is the correct endpoint for agent orchestration. Other guides may incorrectly use the Chat Completions API (<code>/chat/completions</code>) which is designed for direct LLM interactions, not agent orchestration.</p>
+        </div>
+
+        <h3>❌ What NOT to Do: Chat Completions API (Incorrect Approach)</h3>
+        
+        <p>Many guides incorrectly suggest using the Chat Completions API for agent interactions. Here's an example of the <strong>wrong approach</strong> that you should avoid:</p>
+        
+        <div class="code-block">
+            <button class="copy-button" onclick="copyCode(this)">📋 Copy</button>
+            <pre><code>import requests
+from modules import token
+
+agent_id = "your_agent_id"
+url = f"http://localhost:4321/api/v1/orchestrate/{agent_id}/chat/completions"
+
+token = "your_wxo_mcsp_token"
+
+payload = {
+    "messages": [
+        {
+            "role": "human",
+            "content": "Analyze the recent sales data from our Elasticsearch database"
+        }
+    ],
+    "additional_parameters": {},
+    "context": {},
+    "stream": False
+}
+
+headers = {
+    "Authorization": f"Bearer {token}",
+    "Content-Type": "application/json"
+}
+
+# Invoke the agent
+response = requests.request("POST", url, json=payload, headers=headers)
+print(f"Agent response:\n{response.text}\n")</code></pre>
+        </div>
+
+        <div class="warning-box">
+            <p><strong>Why This Approach Fails:</strong></p>
+            <ul>
+                <li><strong>Wrong API Endpoint:</strong> Uses <code>/chat/completions</code> instead of <code>/runs</code></li>
+                <li><strong>No Agent Features:</strong> Cannot access tools, knowledge bases, or complex workflows</li>
+                <li><strong>Synchronous Only:</strong> Expects immediate responses, doesn't handle asynchronous agent operations</li>
+                <li><strong>Limited Response:</strong> Returns simple text without citations, tool usage, or rich metadata</li>
+                <li><strong>No Error Handling:</strong> Doesn't handle the complex response structure of agent orchestration</li>
+            </ul>
+        </div>
+
+        <p><strong>When to Use Chat Completions API:</strong> Only for direct LLM interactions without agent capabilities - simple chatbots, text generation, or basic conversation flows that don't require tools or knowledge bases.</p>
+
+        <p><strong>When to Use Runs API:</strong> For any agent that has tools, knowledge bases, complex workflows, or requires asynchronous processing - which is most production use cases.</p>
+
+        <h2 id="api-reference">Orchestrate Agent API Reference</h2>
+        
+        <p>The watsonx Orchestrate Developer Edition provides several API endpoints for different use cases. Here's a comprehensive overview of each endpoint:</p>
+        
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Method</th>
+                    <th>Endpoint</th>
+                    <th>Description</th>
+                    <th>Use Case</th>
+                    <th>Documentation</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>POST</strong></td>
+                    <td><code>/api/v1/orchestrate/runs/stream</code></td>
+                    <td><strong>Chat With Orchestrate Agent As Stream</strong><br>Real-time streaming responses from agents with immediate feedback</td>
+                    <td>Interactive chat interfaces, real-time applications, live agent interactions</td>
+                    <td><a href="https://developer.watson-orchestrate.ibm.com/apis/orchestrate-agent/chat-with-orchestrate-assistant-as-stream" target="_blank">View Docs</a></td>
+                </tr>
+                <tr>
+                    <td><strong>GET</strong></td>
+                    <td><code>/api/v1/orchestrate/runs</code></td>
+                    <td><strong>List Orchestrate Agent Runs</strong><br>Retrieve a list of all agent run sessions with pagination support</td>
+                    <td>Monitoring agent activity, audit trails, run history analysis</td>
+                    <td><a href="https://developer.watson-orchestrate.ibm.com/apis/orchestrate-agent/list-orchestrate-assistant-runs" target="_blank">View Docs</a></td>
+                </tr>
+                <tr>
+                    <td><strong>POST</strong></td>
+                    <td><code>/api/v1/orchestrate/runs</code></td>
+                    <td><strong>Chat With Orchestrate Agent</strong><br>Standard asynchronous agent invocation (what we used in our example)</td>
+                    <td>Production applications, complex workflows, tools and knowledge base access</td>
+                    <td><a href="https://developer.watson-orchestrate.ibm.com/apis/orchestrate-agent/chat-with-orchestrate-assistant" target="_blank">View Docs</a></td>
+                </tr>
+                <tr>
+                    <td><strong>POST</strong></td>
+                    <td><code>/api/v1/orchestrate/upload/s3</code></td>
+                    <td><strong>Upload To S3</strong><br>Upload files to S3 storage for agent processing</td>
+                    <td>File processing, document analysis, data ingestion workflows</td>
+                    <td><a href="https://developer.watson-orchestrate.ibm.com/apis/orchestrate-agent/upload-to-s3" target="_blank">View Docs</a></td>
+                </tr>
+                <tr>
+                    <td><strong>POST</strong></td>
+                    <td><code>/api/v1/orchestrate/runs/{run_id}/cancel</code></td>
+                    <td><strong>Cancel An Orchestrate Agent Run</strong><br>Stop an ongoing agent execution</td>
+                    <td>Resource management, timeout handling, user-initiated cancellations</td>
+                    <td><a href="https://developer.watson-orchestrate.ibm.com/apis/orchestrate-agent/cancel-an-orchestrate-assistant-run" target="_blank">View Docs</a></td>
+                </tr>
+                <tr>
+                    <td><strong>GET</strong></td>
+                    <td><code>/api/v1/orchestrate/runs/{run_id}</code></td>
+                    <td><strong>Get Orchestrate Agent Run</strong><br>Retrieve detailed information about a specific run</td>
+                    <td>Run status checking, result retrieval, debugging agent executions</td>
+                    <td><a href="https://developer.watson-orchestrate.ibm.com/apis/orchestrate-agent/get-orchestrate-assistant-run" target="_blank">View Docs</a></td>
+                </tr>
+                <tr>
+                    <td><strong>GET</strong></td>
+                    <td><code>/api/v1/orchestrate/runs/{run_id}/events</code></td>
+                    <td><strong>Get Orchestrate Agent Run Events</strong><br>Retrieve detailed execution events and logs</td>
+                    <td>Debugging, execution tracing, performance analysis</td>
+                    <td><a href="https://developer.watson-orchestrate.ibm.com/apis/orchestrate-agent/get-orchestrate-assistant-run-events" target="_blank">View Docs</a></td>
+                </tr>
+                <tr>
+                    <td><strong>POST</strong></td>
+                    <td><code>/api/v1/orchestrate/agents/{agent_id}/chat/completions</code></td>
+                    <td><strong>Chat With Agents</strong><br>Direct LLM interaction without agent orchestration (avoid this for agents with tools)</td>
+                    <td>Simple chatbots, direct LLM access, basic text generation</td>
+                    <td><a href="https://developer.watson-orchestrate.ibm.com/apis/orchestrate-agent/chat-with-agents" target="_blank">View Docs</a></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="note">
+            <p><strong>Key Takeaway:</strong> For agents with tools, knowledge bases, or complex workflows, use the <strong>POST /api/v1/orchestrate/runs</strong> endpoint (as demonstrated in our example). The streaming endpoint is great for real-time interactions, while the direct chat endpoint should only be used for simple LLM interactions without agent capabilities.</p>
+        </div>
+
+        <h2 id="advanced-parameters">Advanced Parameters and Message Structure</h2>
+        
+        <p>The Orchestrate API supports rich message structures and advanced parameters for sophisticated agent interactions. Understanding these components is crucial for building production applications.</p>
+
+        <h3>Message Structure Components</h3>
+        
+        <div class="code-block">
+            <p><strong>Basic Message Structure:</strong></p>
+            <pre><code>{
+  "message": {
+    "role": "user",
+    "content": [
+      {
+        "response_type": "conversational_search"
+      }
+    ],
+    "mentions": [
+      {
+        "type": "document",
+        "id": "3c90c3cc-0d44-4b50-8888-8dd25736052a",
+        "name": "Sales Report 2024"
+      }
+    ],
+    "document_ids": [
+      "3c90c3cc-0d44-4b50-8888-8dd25736052a"
+    ],
+    "parent_message_id": "3c90c3cc-0d44-4b50-8888-8dd25736052a",
+    "additional_properties": {
+      "wxa_message": {},
+      "display_properties": {
+        "skip_render": false,
+        "is_async": false
+      },
+      "tool_calls": [
+        {}
+      ],
+      "tool_call_id": "tool_123",
+      "tool_name": "elasticsearch_tool",
+      "wxo_connection_status": {
+        "connection_status": "connected",
+        "connection_message": "Successfully connected to Elasticsearch"
+      }
+    },
+    "assistant_id": "3c90c3cc-0d44-4b50-8888-8dd25736052a",
+    "context": {
+      "values": []
+    },
+    "step_history": [
+      {}
+    ],
+    "message_state": {}
+  }
+}</code></pre>
+        </div>
+
+        <h3>Key Message Components Explained</h3>
+        
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Component</th>
+                    <th>Purpose</th>
+                    <th>Example</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>mentions</strong></td>
+                    <td>Reference specific documents, tools, or entities in the conversation</td>
+                    <td>Document references, tool invocations, user mentions</td>
+                </tr>
+                <tr>
+                    <td><strong>document_ids</strong></td>
+                    <td>Specify which documents the agent should consider</td>
+                    <td>Knowledge base documents, uploaded files, reports</td>
+                </tr>
+                <tr>
+                    <td><strong>additional_properties</strong></td>
+                    <td>Extended metadata for tool calls, display options, and status</td>
+                    <td>Tool execution details, rendering preferences, connection status</td>
+                </tr>
+                <tr>
+                    <td><strong>llm_params</strong></td>
+                    <td>Control LLM behavior and response generation</td>
+                    <td>Temperature, token limits, sampling parameters</td>
+                </tr>
+                <tr>
+                    <td><strong>guardrails</strong></td>
+                    <td>Content filtering and safety controls</td>
+                    <td>HAP, social bias, PII detection</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>LLM Parameters for Fine-tuning</h3>
+        
+        <div class="code-block">
+            <p><strong>Common LLM Parameters:</strong></p>
+            <pre><code>"llm_params": {
+  "temperature": 0.7,           // Controls randomness (0.0-1.0)
+  "max_new_tokens": 1000,       // Maximum response length
+  "top_p": 0.9,                // Nucleus sampling parameter
+  "top_k": 50,                 // Top-k sampling
+  "repetition_penalty": 1.1,    // Prevents repetitive text
+  "stop_sequences": ["\n\n", "END"], // Stop generation at these tokens
+  "time_limit": 30,            // Maximum processing time (seconds)
+  "return_options": {
+    "generated_tokens": true,   // Include token-level details
+    "input_tokens": true,       // Include input tokenization
+    "token_logprobs": true      // Include probability scores
+  }
+}</code></pre>
+        </div>
+
+        <h3>Guardrails for Content Safety</h3>
+        
+        <div class="code-block">
+            <p><strong>Guardrails Configuration:</strong></p>
+            <pre><code>"guardrails": {
+  "hap": {                     // Harmful content detection
+    "input": {
+      "enabled": true,
+      "threshold": 0.8
+    },
+    "output": {
+      "enabled": true,
+      "threshold": 0.8
+    }
+  },
+  "social_bias": {             // Bias detection
+    "input": {
+      "enabled": true,
+      "threshold": 0.7
+    },
+    "output": {
+      "enabled": true,
+      "threshold": 0.7
+    }
+  },
+  "pii": {                     // Personal data protection
+    "input": {
+      "enabled": true,
+      "threshold": 0.9
+    },
+    "output": {
+      "enabled": true,
+      "threshold": 0.9
+    }
+  }
+}</code></pre>
+        </div>
+
+        <h2 id="document-management">Document and Knowledge Base Management</h2>
+        
+        <p>Orchestrate provides comprehensive APIs for managing documents and knowledge bases that agents can access during conversations.</p>
+
+        <h3>Document Collection APIs</h3>
+        
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Method</th>
+                    <th>Endpoint</th>
+                    <th>Description</th>
+                    <th>Use Case</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>GET</strong></td>
+                    <td><code>/api/v1/orchestrate/documents/collections</code></td>
+                    <td><strong>Fetch Document Collections</strong><br>List all document collections</td>
+                    <td>Browse available knowledge bases, organize documents</td>
+                </tr>
+                <tr>
+                    <td><strong>POST</strong></td>
+                    <td><code>/api/v1/orchestrate/documents/collections</code></td>
+                    <td><strong>Create Document Collection</strong><br>Create a new document collection</td>
+                    <td>Set up new knowledge bases, organize related documents</td>
+                </tr>
+                <tr>
+                    <td><strong>DELETE</strong></td>
+                    <td><code>/api/v1/orchestrate/documents/collections/{id}</code></td>
+                    <td><strong>Delete Document Collections</strong><br>Remove a document collection</td>
+                    <td>Clean up unused knowledge bases, data management</td>
+                </tr>
+                <tr>
+                    <td><strong>GET</strong></td>
+                    <td><code>/api/v1/orchestrate/documents/collections/{id}</code></td>
+                    <td><strong>Get Document Collection By Id</strong><br>Retrieve specific collection details</td>
+                    <td>Inspect collection metadata, verify contents</td>
+                </tr>
+                <tr>
+                    <td><strong>PATCH</strong></td>
+                    <td><code>/api/v1/orchestrate/documents/collections/{id}</code></td>
+                    <td><strong>Update Document Collection</strong><br>Modify collection properties</td>
+                    <td>Update collection metadata, change settings</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>Individual Document APIs</h3>
+        
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Method</th>
+                    <th>Endpoint</th>
+                    <th>Description</th>
+                    <th>Use Case</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>GET</strong></td>
+                    <td><code>/api/v1/orchestrate/documents</code></td>
+                    <td><strong>List Documents</strong><br>Retrieve all documents</td>
+                    <td>Browse available documents, inventory management</td>
+                </tr>
+                <tr>
+                    <td><strong>POST</strong></td>
+                    <td><code>/api/v1/orchestrate/documents</code></td>
+                    <td><strong>Create Document</strong><br>Create a new document entry</td>
+                    <td>Add new knowledge base entries, document metadata</td>
+                </tr>
+                <tr>
+                    <td><strong>GET</strong></td>
+                    <td><code>/api/v1/orchestrate/documents/{id}</code></td>
+                    <td><strong>Get Document By Id</strong><br>Retrieve specific document</td>
+                    <td>Access document content, verify information</td>
+                </tr>
+                <tr>
+                    <td><strong>DELETE</strong></td>
+                    <td><code>/api/v1/orchestrate/documents/{id}</code></td>
+                    <td><strong>Delete Document By Id</strong><br>Remove a document</td>
+                    <td>Clean up outdated information, data management</td>
+                </tr>
+                <tr>
+                    <td><strong>PATCH</strong></td>
+                    <td><code>/api/v1/orchestrate/documents/{id}</code></td>
+                    <td><strong>Update Document</strong><br>Modify document properties</td>
+                    <td>Update document metadata, correct information</td>
+                </tr>
+                <tr>
+                    <td><strong>POST</strong></td>
+                    <td><code>/api/v1/orchestrate/documents/upload</code></td>
+                    <td><strong>Upload Document</strong><br>Upload document content</td>
+                    <td>Add new documents to knowledge base, file ingestion</td>
+                </tr>
+                <tr>
+                    <td><strong>GET</strong></td>
+                    <td><code>/api/v1/orchestrate/documents/{id}/download</code></td>
+                    <td><strong>Download Document</strong><br>Retrieve document content</td>
+                    <td>Export documents, backup content, content verification</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2 id="vector-index">Vector Index Management</h2>
+        
+        <p>Vector indices enable semantic search and retrieval from large document collections, making knowledge bases more powerful.</p>
+
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Method</th>
+                    <th>Endpoint</th>
+                    <th>Description</th>
+                    <th>Use Case</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>GET</strong></td>
+                    <td><code>/api/v1/orchestrate/vector-indices</code></td>
+                    <td><strong>List Vector Indices</strong><br>Retrieve all vector indices</td>
+                    <td>Browse available semantic search indices</td>
+                </tr>
+                <tr>
+                    <td><strong>POST</strong></td>
+                    <td><code>/api/v1/orchestrate/vector-indices</code></td>
+                    <td><strong>Create Vector Index</strong><br>Create a new semantic search index</td>
+                    <td>Set up semantic search for document collections</td>
+                </tr>
+                <tr>
+                    <td><strong>DELETE</strong></td>
+                    <td><code>/api/v1/orchestrate/vector-indices/{id}</code></td>
+                    <td><strong>Delete Vector Index</strong><br>Remove a vector index</td>
+                    <td>Clean up unused semantic search indices</td>
+                </tr>
+                <tr>
+                    <td><strong>GET</strong></td>
+                    <td><code>/api/v1/orchestrate/vector-indices/{id}</code></td>
+                    <td><strong>Get Vector Index By Id</strong><br>Retrieve specific index details</td>
+                    <td>Inspect index configuration, verify settings</td>
+                </tr>
+                <tr>
+                    <td><strong>PATCH</strong></td>
+                    <td><code>/api/v1/orchestrate/vector-indices/{id}</code></td>
+                    <td><strong>Update Vector Index</strong><br>Modify index properties</td>
+                    <td>Update index settings, change search parameters</td>
+                </tr>
+                <tr>
+                    <td><strong>GET</strong></td>
+                    <td><code>/api/v1/orchestrate/vector-indices/{id}/collections</code></td>
+                    <td><strong>Get Collections In Vector Index</strong><br>List collections in an index</td>
+                    <td>See which document collections are indexed</td>
+                </tr>
+                <tr>
+                    <td><strong>PUT</strong></td>
+                    <td><code>/api/v1/orchestrate/vector-indices/{id}/collections</code></td>
+                    <td><strong>Add Collection To Vector Index</strong><br>Add documents to semantic search</td>
+                    <td>Index new document collections for semantic search</td>
+                </tr>
+                <tr>
+                    <td><strong>PUT</strong></td>
+                    <td><code>/api/v1/orchestrate/vector-indices/{id}/refresh</code></td>
+                    <td><strong>Refresh Vector Index</strong><br>Update index with new documents</td>
+                    <td>Sync index with updated document collections</td>
+                </tr>
+                <tr>
+                    <td><strong>PUT</strong></td>
+                    <td><code>/api/v1/orchestrate/vector-indices/{id}/rebuild</code></td>
+                    <td><strong>Rebuild Vector Index</strong><br>Completely rebuild the index</td>
+                    <td>Major updates, index optimization, configuration changes</td>
+                </tr>
+                <tr>
+                    <td><strong>POST</strong></td>
+                    <td><code>/api/v1/orchestrate/vector-indices/{id}/retrieve</code></td>
+                    <td><strong>Retrieve Documents From The Vector Index</strong><br>Semantic search query</td>
+                    <td>Find relevant documents using natural language queries</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="note">
+            <p><strong>Integration Tip:</strong> Use document collections and vector indices together to create powerful knowledge bases. Upload documents to collections, then add those collections to vector indices for semantic search capabilities. Agents can then reference specific documents or perform semantic searches during conversations.</p>
+        </div>
+
+        <h2 id="step8">Step 8: Testing and Execution</h2>
+        
+        <p><span class="step-number">8</span>Run the script and inspect the response:</p>
+        
+        <div class="code-block">
+            <button class="copy-button" onclick="copyCode(this)">📋 Copy</button>
+            <pre><code>python agent_orchestrator.py</code></pre>
+        </div>
+        
+        <p>The script will:</p>
+        <ol>
+            <li>Submit your question to the agent via the Runs API</li>
+            <li>Receive a <code>run_id</code> for tracking the asynchronous execution</li>
+            <li>Poll the run status until completion</li>
+            <li>Parse and display the final response with any citations</li>
+        </ol>
+
+        <h2 id="comparison">Why This Approach Works vs. Others</h2>
+        
+        <p>Many guides and blog posts incorrectly use the Chat Completions API for agent interactions. Here's why this approach is correct:</p>
+        
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Aspect</th>
+                    <th>Correct Approach (Runs API)</th>
+                    <th>Incorrect Approach (Chat Completions API)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>API Endpoint</strong></td>
+                    <td><code>/api/v1/orchestrate/runs</code></td>
+                    <td><code>/api/v1/orchestrate/{agent_id}/chat/completions</code></td>
+                </tr>
+                <tr>
+                    <td><strong>Execution Model</strong></td>
+                    <td>Asynchronous with polling</td>
+                    <td>Synchronous (immediate response)</td>
+                </tr>
+                <tr>
+                    <td><strong>Agent Features</strong></td>
+                    <td>Supports tools, knowledge bases, complex workflows</td>
+                    <td>Direct LLM interaction only</td>
+                </tr>
+                <tr>
+                    <td><strong>Response Structure</strong></td>
+                    <td>Rich metadata with citations, tool usage</td>
+                    <td>Simple text response</td>
+                </tr>
+                <tr>
+                    <td><strong>Use Case</strong></td>
+                    <td>Production agent orchestration</td>
+                    <td>Simple chatbot without agent capabilities</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>Key Differences Explained</h3>
+        
+        <h4>1. Asynchronous vs. Synchronous Processing</h4>
+        
+        <p><strong>Correct Approach:</strong> Agent runs are asynchronous because they need time to execute tools, access knowledge bases, and perform complex workflows. The polling mechanism waits for the agent to complete its work.</p>
+        
+        <p><strong>Incorrect Approach:</strong> Expects immediate responses, which won't work for complex agent operations that require time to complete.</p>
+        
+        <h4>2. Payload Structure</h4>
+        
+        <div class="code-block">
+            <p><strong>Correct (Runs API):</strong></p>
+            <pre><code>{
+    "agent_id": "your_agent_id",
+    "message": {
+        "role": "user",
+        "content": "Your question here"
+    }
+}</code></pre>
+        </div>
+        
+        <div class="code-block">
+            <p><strong>Incorrect (Chat Completions API):</strong></p>
+            <pre><code>{
+    "messages": [
+        {
+            "role": "human",
+            "content": "Your question here"
+        }
+    ],
+    "additional_parameters": {
+        "max_tokens": 1000
+    }
+}</code></pre>
+        </div>
+        
+        <h4>3. Response Handling</h4>
+        
+        <p><strong>Correct Approach:</strong> Handles complex nested response structures that include citations, tool usage, and other agent-specific metadata.</p>
+        
+        <p><strong>Incorrect Approach:</strong> Expects simple chat completion responses without agent-specific features.</p>
+
+        <h2 id="summary">Summary</h2>
+        
+        <div class="success-box">
+            <p>This local REST API flow gives you complete control over agent orchestration—no cloud dependencies, fully interactive and testable. The key is using the <strong>Runs API</strong> for agent interactions rather than the Chat Completions API.</p>
+        </div>
+        
+        <hr style="margin: 40px 0; border: none; border-top: 1px solid #dee2e6;">
+        
+        <p><em>This guide demonstrates the correct approach for working with watsonx Orchestrate agents via REST API.</em></p>
+        
+        <hr style="margin: 40px 0; border: none; border-top: 1px solid #dee2e6;">
+        
+        <div style="background: #f8f9fa; padding: 20px; border-radius: 5px; margin-top: 30px;">
+            <h3 style="margin-top: 0; color: #2c3e50;">About the Author</h3>
+            <p>I'm Justin Townsend, a technology enthusiast and developer advocate with a passion for cloud-native development and AI orchestration. My work focuses on empowering developers with practical knowledge and hands-on experience in emerging technologies.</p>
+            
+            <p>With expertise in distributed systems, API development, and artificial intelligence, I specialize in creating comprehensive guides that bridge the gap between complex technical concepts and real-world implementation. My goal is to provide developers with the tools and knowledge they need to build robust, scalable applications in the cloud.</p>
+            
+            <p>When I'm not coding or writing technical content, you'll find me exploring new technologies, contributing to open-source projects, and sharing insights with the developer community. I believe in the power of knowledge sharing and collaborative learning to drive innovation in the tech industry.</p>
+            
+            <p><em>The views and opinions expressed in this guide are my own and do not necessarily reflect those of any organization or company.</em></p>
+        </div>
+    </div>
+    
+    <script>
+        function copyCode(button) {
+            const codeBlock = button.nextElementSibling;
+            const code = codeBlock.textContent;
+            
+            navigator.clipboard.writeText(code).then(function() {
+                // Change button text temporarily
+                const originalText = button.innerHTML;
+                button.innerHTML = "✅ Copied!";
+                button.classList.add('copied');
+                
+                // Reset button after 2 seconds
+                setTimeout(function() {
+                    button.innerHTML = originalText;
+                    button.classList.remove('copied');
+                }, 2000);
+            }).catch(function(err) {
+                console.error('Could not copy text: ', err);
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = code;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                
+                // Change button text temporarily
+                const originalText = button.innerHTML;
+                button.innerHTML = "✅ Copied!";
+                button.classList.add('copied');
+                
+                // Reset button after 2 seconds
+                setTimeout(function() {
+                    button.innerHTML = originalText;
+                    button.classList.remove('copied');
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>
