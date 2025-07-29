@@ -262,6 +262,57 @@
         pre .copy-button.copied {
             background: #27ae60;
         }
+
+        /* New styles for collapsible setup options */
+        .setup-options {
+            margin-top: 20px;
+        }
+
+        .setup-option {
+            background: #f0f7fd;
+            border: 1px solid #cce5ff;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+
+        .setup-toggle {
+            background: #3498db;
+            color: white;
+            padding: 15px 20px;
+            cursor: pointer;
+            border: none;
+            width: 100%;
+            text-align: left;
+            font-size: 1.1em;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .setup-toggle:hover {
+            background: #2c3e50;
+        }
+
+        .toggle-icon {
+            transition: transform 0.3s ease;
+        }
+
+        .setup-option.active .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .setup-content {
+            padding: 0 20px 20px;
+            border-top: 1px solid #cce5ff;
+            display: none;
+        }
+
+        .setup-option.active .setup-content {
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -314,18 +365,181 @@
 
         <h2 id="step1">Step 1: Environment Setup</h2>
         
-        <p><span class="step-number">1</span>Create a <code>.env</code> file with the following variables:</p>
+        <p>Choose your preferred environment setup method:</p>
         
-        <div class="code-block">
-            <button class="copy-button" onclick="copyCode(this)">📋 Copy</button>
-            <pre><code>WO_DEVELOPER_EDITION_SOURCE=myibm
+        <div class="setup-options">
+            <div class="setup-option">
+                <button class="setup-toggle" onclick="toggleSetup(this)">
+                    <span class="toggle-icon">▼</span>
+                    <strong>Option 1: Entitlement Key (MyIBM)</strong>
+                </button>
+                <div class="setup-content">
+                    <p>Use this option if you have an entitlement key from MyIBM and want to access watsonx.ai as model sources.</p>
+                    
+                    <p>Create a <code>.env</code> file with the following variables:</p>
+                    
+                    <div class="code-block">
+                        <button class="copy-button" onclick="copyCode(this)">📋 Copy</button>
+                        <pre><code>WO_DEVELOPER_EDITION_SOURCE=myibm
 WO_ENTITLEMENT_KEY=&lt;YOUR_ENTITLEMENT_KEY&gt;
 WATSONX_APIKEY=&lt;YOUR_WATSONX_API_KEY&gt;
 WATSONX_SPACE_ID=&lt;YOUR_SPACE_ID&gt;</code></pre>
-        </div>
+                    </div>
 
-        <div class="note">
-            <p><strong>Note:</strong> The <code>WO_DEVELOPER_EDITION_SOURCE=myibm</code> variable indicates you're using an entitlement key from MyIBM and accessing watsonx.ai as model sources.</p>
+                    <div class="note">
+                        <p><strong>Note:</strong> The <code>WO_DEVELOPER_EDITION_SOURCE=myibm</code> variable indicates you're using an entitlement key from MyIBM and accessing watsonx.ai as model sources.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="setup-option">
+                <button class="setup-toggle" onclick="toggleSetup(this)">
+                    <span class="toggle-icon">▼</span>
+                    <strong>Option 2: IBM Cloud</strong>
+                </button>
+                <div class="setup-content">
+                    <p>Use this option to connect to your IBM Cloud watsonx Orchestrate instance. You'll need both the service instance URL and an API key.</p>
+                    
+                    <div class="warning-box">
+                        <p><strong>Important:</strong> Don't use the credentials from the IBM Cloud resources page. Follow the procedure below to get the appropriate API key and service instance URL.</p>
+                    </div>
+                    
+                    <h4>Getting Your IBM Cloud Credentials</h4>
+                    
+                    <ol>
+                        <li><strong>Log in to your watsonx Orchestrate instance</strong></li>
+                        <li><strong>Click your user icon</strong> on the top right and click <strong>Settings</strong></li>
+                        <li><strong>Go to the API details tab</strong></li>
+                        <li><strong>Copy the service instance URL</strong></li>
+                        <li><strong>Click the Generate API key button</strong></li>
+                        <li><strong>Generate an API Key:</strong> The page redirects you to the IBM Cloud Identity Access Management center. Click <strong>Create</strong> to create a new API Key</li>
+                        <li><strong>Enter a name and description</strong> for your API Key</li>
+                        <li><strong>Copy the API key</strong> and store it in a safe vault</li>
+                    </ol>
+                    
+                    <h4>Adding and Activating Your Environment</h4>
+                    
+                    <p>Use the ADK CLI to add and activate your environment:</p>
+                    
+                    <div class="code-block">
+                        <button class="copy-button" onclick="copyCode(this)">📋 Copy</button>
+                        <pre><code>orchestrate env add -n my-name -u https://my-service-instance-url --type ibm_iam --activate</code></pre>
+                    </div>
+                    
+                    <p>Or with explicit API key:</p>
+                    
+                    <div class="code-block">
+                        <button class="copy-button" onclick="copyCode(this)">📋 Copy</button>
+                        <pre><code>orchestrate env add -n &lt;environment-name&gt; -u https://my-service-instance-url --api-key &lt;my-api-key&gt; --type ibm_iam --activate</code></pre>
+                    </div>
+                    
+                    <h4>Activating Your Environment</h4>
+                    
+                    <p>Run the following command to activate the environment you created:</p>
+                    
+                    <div class="code-block">
+                        <button class="copy-button" onclick="copyCode(this)">📋 Copy</button>
+                        <pre><code>orchestrate env activate &lt;environment-name&gt;</code></pre>
+                    </div>
+                    
+                    <div class="note">
+                        <p><strong>Note:</strong> You can also activate a local development environment. This environment is provided by the watsonx Orchestrate Developer Edition, a stripped-down version of watsonx Orchestrate that runs under a Docker container to be used as a development server.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="setup-option">
+                <button class="setup-toggle" onclick="toggleSetup(this)">
+                    <span class="toggle-icon">▼</span>
+                    <strong>Option 3: watsonx Orchestrate Account</strong>
+                </button>
+                <div class="setup-content">
+                    <p>Starting at version 1.5.0, you can use your watsonx Orchestrate account to pull images from Docker, and you no longer need an entitlement key to pull the images.</p>
+                    
+                    <p>Use the following variables to pull watsonx Orchestrate Developer Edition images using the watsonx Orchestrate account:</p>
+                    
+                    <div class="code-block">
+                        <button class="copy-button" onclick="copyCode(this)">📋 Copy</button>
+                        <pre><code>WO_DEVELOPER_EDITION_SOURCE=orchestrate
+WO_INSTANCE=&lt;service_instance_url&gt;
+WO_API_KEY=&lt;wxo_api_key&gt;</code></pre>
+                    </div>
+                    
+                    <div class="note">
+                        <p><strong>Note:</strong> If image pulling fails, try setting <code>WO_DEVELOPER_EDITION_SOURCE</code> to <code>myibm</code> and add the <code>WO_ENTITLEMENT_KEY</code> variable.</p>
+                    </div>
+                    
+                    <h4>Optional: Skip Login After Pulling Images</h4>
+                    
+                    <p>After pulling the images, you can optionally add the <code>WO_DEVELOPER_EDITION_SKIP_LOGIN</code> variable and set it to <code>true</code> to skip ICR login. The CLI won't pull new images, but you can still use the ones already available.</p>
+                    
+                    <h4>Pull Images and Start Server</h4>
+                    
+                    <p>With your local variables configured in the <code>.env</code> file, use the following command with the ADK to automatically pull the watsonx Orchestrate Developer Edition images and start the containers:</p>
+                    
+                    <div class="code-block">
+                        <button class="copy-button" onclick="copyCode(this)">📋 Copy</button>
+                        <pre><code>orchestrate server start -e &lt;path-.env-file&gt;</code></pre>
+                    </div>
+                    
+                    <h4>Use watsonx Orchestrate Developer Edition with ADK</h4>
+                    
+                    <p>After installing watsonx Orchestrate Developer Edition, manage and use it using ADK commands. With these commands, you can:</p>
+                    
+                    <ul>
+                        <li>Start or stop the watsonx Orchestrate Developer Edition server</li>
+                        <li>Activate your local environment</li>
+                        <li>Launch the local UI</li>
+                        <li>Reset the server</li>
+                        <li>View server logs</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="setup-option">
+                <button class="setup-toggle" onclick="toggleSetup(this)">
+                    <span class="toggle-icon">▼</span>
+                    <strong>Option 4: watsonx.ai Account</strong>
+                </button>
+                <div class="setup-content">
+                    <p>Use this option if you have a watsonx.ai account and want to access watsonx.ai as model sources.</p>
+                    
+                    <p>Use the following variables to pull watsonx Orchestrate Developer Edition images using the watsonx.ai account:</p>
+                    
+                    <div class="code-block">
+                        <button class="copy-button" onclick="copyCode(this)">📋 Copy</button>
+                        <pre><code>WO_DEVELOPER_EDITION_SOURCE=myibm
+WO_ENTITLEMENT_KEY=&lt;my_entitlement_key&gt;
+WATSONX_APIKEY=&lt;my_watsonx_api_key&gt;
+WATSONX_SPACE_ID=&lt;my_space_id&gt;</code></pre>
+                    </div>
+                    
+                    <h4>Optional: Skip Login After Pulling Images</h4>
+                    
+                    <p>After pulling the images, you can optionally add the <code>WO_DEVELOPER_EDITION_SKIP_LOGIN</code> variable and set it to <code>true</code> to skip ICR login. The CLI won't pull new images, but you can still use the ones already available.</p>
+                    
+                    <h4>Pull Images and Start Server</h4>
+                    
+                    <p>With your local variables configured in the <code>.env</code> file, use the following command with the ADK to automatically pull the watsonx Orchestrate Developer Edition images and start the containers:</p>
+                    
+                    <div class="code-block">
+                        <button class="copy-button" onclick="copyCode(this)">📋 Copy</button>
+                        <pre><code>orchestrate server start -e &lt;path-.env-file&gt;</code></pre>
+                    </div>
+                    
+                    <h4>Use watsonx Orchestrate Developer Edition with ADK</h4>
+                    
+                    <p>After installing watsonx Orchestrate Developer Edition, manage and use it using ADK commands. With these commands, you can:</p>
+                    
+                    <ul>
+                        <li>Start or stop the watsonx Orchestrate Developer Edition server</li>
+                        <li>Activate your local environment</li>
+                        <li>Launch the local UI</li>
+                        <li>Reset the server</li>
+                        <li>View server logs</li>
+                    </ul>
+                </div>
+            </div>
         </div>
 
         <h2 id="step2">Step 2: Server Startup</h2>
@@ -1171,6 +1385,27 @@ print(f"Agent response:\n{response.text}\n")</code></pre>
                     button.classList.remove('copied');
                 }, 2000);
             });
+        }
+
+        function toggleSetup(button) {
+            const setupOption = button.parentElement;
+            const setupContent = button.nextElementSibling;
+            const icon = button.querySelector('.toggle-icon');
+            const isActive = setupOption.classList.contains('active');
+
+            // Close all other setup options
+            document.querySelectorAll('.setup-option').forEach(option => {
+                if (option !== setupOption) {
+                    option.classList.remove('active');
+                    option.querySelector('.setup-content').style.display = 'none';
+                    option.querySelector('.toggle-icon').textContent = '▼';
+                }
+            });
+
+            // Toggle the current setup option
+            setupOption.classList.toggle('active');
+            setupContent.style.display = isActive ? 'none' : 'block';
+            icon.textContent = isActive ? '▼' : '▲';
         }
     </script>
 </body>
